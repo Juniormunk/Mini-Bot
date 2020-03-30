@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "Mini_Bot_3-17-2020"
+		},
+		{
+			"path": "Mini_Bot_Gyro_3-17-20"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"string": "cpp",
+			"initializer_list": "cpp",
+			"typeinfo": "cpp",
+			"*.tcc": "cpp",
+			"fstream": "cpp",
+			"istream": "cpp",
+			"ostream": "cpp",
+			"sstream": "cpp"
+		}
+	}
+}
