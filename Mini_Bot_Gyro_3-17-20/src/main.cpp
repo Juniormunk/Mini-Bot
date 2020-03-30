@@ -138,13 +138,15 @@ void loop()
     {
       Serial1.println(initializing);
       initialize();
-      Serial.println("init");
+      if (Serial)
+        Serial.println("init");
     }
     //If the incoming data is equal to the watchdog sequence then respond with the watchdog sequence.
     if (strcmp(watchDog, response) == 0)
     {
       Serial1.println(watchDog);
-      Serial.println("WatchDog");
+      if (Serial)
+        Serial.println("WatchDog");
     }
   }
   else
@@ -194,6 +196,15 @@ void loop()
       Serial1.print(pitch);
       Serial1.print(" : ");
       Serial1.println(roll);
+      if (Serial)
+      {
+        Serial.print("Orientation: ");
+        Serial.print(heading);
+        Serial.print(" : ");
+        Serial.print(pitch);
+        Serial.print(" : ");
+        Serial.println(roll);
+      }
 
       // increment previous time, so we keep proper pace
       microsPrevious = microsPrevious + microsPerReading;

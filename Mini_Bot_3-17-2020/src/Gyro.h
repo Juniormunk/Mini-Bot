@@ -6,17 +6,16 @@
 #include <ErrorCode.h>
 #include <Watchdogable.h>
 #include <Loopable.h>
+#include <SerialBuffer.h>
+#include <SerialReadable.h>
 
-class Gyro : public Loopable, public Watchdogable, public PIDSensor
+class Gyro : public Loopable, public Watchdogable, public PIDSensor, public SerialReadable
 {
 public:
-    Gyro(HardwareSerial serial, unsigned long timeout, String name) : Loopable(), Watchdogable(), PIDSensor()
+    Gyro(unsigned long timeout, String name, SerialBuffer *serialBuffer) : Loopable(), Watchdogable(), PIDSensor(), SerialReadable(serialBuffer)
     {
         this->timeout = timeout;
         //Save the serial away this is where our gyro is connected.
-        this->serial = serial;
-        this->serial.begin(115200);
-        this->serial.setTimeout(5);
         this->name = name;
     }
 
@@ -36,7 +35,6 @@ public:
     float getValue();            //Returns the value needed to calculate pid.
 
 private:
-    HardwareSerial serial; //The serial in which the gyro is connected to.
     const String readySend = "Ready";
     const String watchDogSend = "WatchDog";
     const String watchDogRecieve = "WatchDog\r";

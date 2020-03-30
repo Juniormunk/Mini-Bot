@@ -7,7 +7,8 @@
 
 //Our gyro with a serial port of Serial1 as that is where it is plugged in
 //Gyro gyro(Serial1, 600);
-Gyro gyro(Serial1, 600, "gyro");
+SerialBuffer serialBuff(Serial1);
+Gyro gyro(600, "gyro", &serialBuff);
 SimpleList<Loopable *> *schedularList = new SimpleList<Loopable *>();
 Schedular *schedular;
 
@@ -31,9 +32,6 @@ void setup()
   //Notify booting.
   Serial.println("Booting...");
 
-  //Begin waiting for gyro.
-
-  //Notify that the gyro is connected.
   schedular->init();
 }
 

@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "Gyro.h"
 #include <ErrorCode.h>
+#include <SerialReadable.h>
+#include <SerialBuffer.h>
 
 ErrorCode Gyro::initialize()
 {
@@ -10,9 +12,9 @@ ErrorCode Gyro::initialize()
     {
         //Notify the gyro that we are ready.
 
-        this->serial.println("Ready");
+        println(readySend);
 
-        String response = this->serial.readStringUntil('\n');
+        String response = readString();
         if (response.equals(initializingRecieve))
         {
             Loopable::init();
@@ -58,7 +60,7 @@ void Gyro::end()
 
 void Gyro::update()
 {
-    String response = serial.readStringUntil('\n');
+    String response = readString();
     if (response.indexOf("Orientation") > -1)
     {
         yaw = getValue(response, ':', 1).toFloat();
@@ -82,7 +84,7 @@ void Gyro::updateWatchdog()
     if (millis() - watchdogLastSend > 200)
     {
         watchdogLastSend = millis();
-        serial.println(watchDogSend);
+        println(watchDogSend);
     }
 }
 
