@@ -11,9 +11,9 @@ void initialize()
   filter = newFilter;
   CurieIMU.begin();
 
-  CurieIMU.setGyroRate(100);
-  CurieIMU.setAccelerometerRate(100);
-  filter.begin(100);
+  CurieIMU.setGyroRate(1600);
+  CurieIMU.setAccelerometerRate(1600);
+  filter.begin(1600);
 
   // Set the accelerometer range to 2G
   CurieIMU.setAccelerometerRange(2);
@@ -60,7 +60,7 @@ void initialize()
   // Serial.print("\t");
   // Serial.println("");
   // initialize variables to pace updates to correct rate
-  microsPerReading = 1000000 / 100;
+  microsPerReading = 1000000 / 1600;
   microsPrevious = micros();
   while (Serial1.available() > 0)
   {
