@@ -6,33 +6,37 @@
 #include <ErrorCode.h>
 #include <Watchdogable.h>
 #include <Loopable.h>
-#include <SerialBuffer.h>
 #include <SerialReadable.h>
 
 class Gyro : public Loopable, public Watchdogable, public PIDSensor, public SerialReadable
 {
 public:
-    Gyro(unsigned long timeout, String name, SerialBuffer *serialBuffer) : Loopable(), Watchdogable(), PIDSensor(), SerialReadable(serialBuffer)
+    Gyro(unsigned long timeout, String name, SerialTicker *serialTicker) : Loopable(), Watchdogable(), PIDSensor(), SerialReadable(serialTicker)
     {
         this->timeout = timeout;
-        //Save the serial away this is where our gyro is connected.
         this->name = name;
+        serialTicker->addTo(this);
     }
 
+    //Loopable Methods
     void init();
     void periodic();
     void end();
     bool isFinished();
 
+    //Instance Methods
     float getYaw();         //Returns the yaw.
     float getPitch();       //returns the pitch.
     float getRoll();        //Returns the roll.
     ErrorCode initialize(); //Will run until successfully initialized (10 second timeout)
 
-    void update();
+    //Watchdogable Methods
     bool getIsWatchdogTripped(); //Returns if the watchdog has been tripped (AKA: device is not responding.)
     void updateWatchdog();       //Send an update message to the gyro to see if it is responding.
     float getValue();            //Returns the value needed to calculate pid.
+
+    //SerialReadable Methods
+    void serialRecieveEvent(String line);
 
 private:
     const String readySend = "Ready";

@@ -2,7 +2,6 @@
 #include "Gyro.h"
 #include <ErrorCode.h>
 #include <SerialReadable.h>
-#include <SerialBuffer.h>
 
 ErrorCode Gyro::initialize()
 {
@@ -13,8 +12,8 @@ ErrorCode Gyro::initialize()
         //Notify the gyro that we are ready.
 
         println(readySend);
-
-        String response = readString();
+        getSerialTicker()->periodic();
+        String response = getLatestString();
         if (response.equals(initializingRecieve))
         {
             Loopable::init();
@@ -39,13 +38,11 @@ void Gyro::init()
             return;
         }
     }
-    hasInit = true;
-    //Loopable::init();
+    Loopable::init();
 }
 
 void Gyro::periodic()
 {
-    update();
     updateWatchdog();
 }
 
@@ -56,19 +53,6 @@ bool Gyro::isFinished()
 
 void Gyro::end()
 {
-}
-
-void Gyro::update()
-{
-    String response = readString();
-    if (response.indexOf("Orientation") > -1)
-    {
-        yaw = getValue(response, ':', 1).toFloat();
-    }
-    if (response.indexOf(watchDogRecieve) > -1)
-    {
-        watchdogLastRecieve = millis();
-    }
 }
 
 bool Gyro::getIsWatchdogTripped()
@@ -96,6 +80,21 @@ float Gyro::getYaw()
 float Gyro::getValue()
 {
     return getYaw();
+}
+
+void Gyro::serialRecieveEvent(String line)
+{
+    String response = line;
+    if (response.indexOf("Orientation") > -1)
+    {
+        yaw = getValue(response, ':', 1).toFloat();
+        pitch = getValue(response, ':', 2).toFloat();
+        roll = getValue(response, ':', 3).toFloat();
+    }
+    if (response.indexOf(watchDogRecieve) > -1)
+    {
+        watchdogLastRecieve = millis();
+    }
 }
 
 String Gyro::getValue(String data, char separator, int index)

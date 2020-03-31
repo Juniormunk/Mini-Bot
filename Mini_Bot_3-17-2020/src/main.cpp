@@ -7,14 +7,14 @@
 
 //Our gyro with a serial port of Serial1 as that is where it is plugged in
 //Gyro gyro(Serial1, 600);
-SerialBuffer serialBuff(Serial1);
-Gyro gyro(600, "gyro", &serialBuff);
+SerialTicker serialTicker(Serial1);
+Gyro gyro(600, "gyro", &serialTicker);
 SimpleList<Loopable *> *schedularList = new SimpleList<Loopable *>();
 Schedular *schedular;
 
 void setup()
 {
-
+  schedularList->add(&serialTicker);
   schedularList->add(&gyro);
   schedular = new Schedular(schedularList);
 

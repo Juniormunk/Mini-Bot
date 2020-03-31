@@ -1,49 +1,37 @@
-#ifndef SerialReadable_h
-#define SerialReadable_h
+#pragma once
 
 #include <Arduino.h>
-#include <SerialBuffer.h>
+#include <SerialTicker.h>
+
+class SerialTicker;
 
 struct SerialReadable
 {
 public:
-    SerialReadable(SerialBuffer *buffer) { this->buffer = buffer; };
-    virtual void serialRecieveEvent(String line){};
-    String readString()
+    SerialReadable(SerialTicker *ticker)
     {
-        // if (lastReadTime != buffer->getReadTime())
-        // {
-        //     lastReadTime = micros();
-        //     return buffer->readString();
-        // }
-        // else
-        // {
-        return buffer->readString();
-
-        //}
+        this->ticker = ticker;
+        //Add this object to get updates about serial events.
+        //this->ticker->add(this);
     };
-    void println(String message)
-    {
-        buffer->println(message);
-    }
-    bool hasData()
-    {
-        if (lastReadTime != buffer->getReadTime())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    String getLastString() { return buffer->readString(); }
 
-    SerialBuffer *getSerialBuffer() { return buffer; };
+    void println(String message);
+
+    bool hasData();
+
+    /**
+     * Returns: The latest recieve string from the serial port.
+     */
+    String getLatestString();
+
+    /**
+     * Returns: The serialticker this object is using.
+     */
+    SerialTicker *getSerialTicker() { return ticker; };
+
+    virtual void serialRecieveEvent(String line){};
 
 private:
-    SerialBuffer *buffer;
+    SerialTicker *ticker;
     unsigned long lastReadTime = 0; // The time at which we accessed the last message from serial.
 };
-
-#endif
