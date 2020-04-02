@@ -9,15 +9,14 @@ struct SerialReadable;
 class SerialTicker : public Loopable
 {
 public:
-    SerialTicker(HardwareSerial serial) : Loopable()
+    SerialTicker(HardwareSerial serial, String name) : Loopable(name)
     {
         this->serial = serial;
         this->readables = readables;
-        this->name = "Serial Ticker";
 
         this->serial = serial;
         this->serial.begin(115200);
-        this->serial.setTimeout(5);
+        this->serial.setTimeout(3);
     };
 
     //Instance Methods

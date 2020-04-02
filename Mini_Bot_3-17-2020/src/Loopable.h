@@ -6,7 +6,7 @@
 struct Loopable
 {
 public:
-    Loopable(){};
+    Loopable(String name) { this->name = name; };
     virtual void init()
     {
         hasInit = true;
@@ -37,6 +37,7 @@ protected:
     //Stores if the init method has been ran.
     bool hasInit = false;
 
+private:
     //Stores the name of this loopable object.
     String name;
 };

@@ -11,10 +11,9 @@
 class Gyro : public Loopable, public Watchdogable, public PIDSensor, public SerialReadable
 {
 public:
-    Gyro(unsigned long timeout, String name, SerialTicker *serialTicker) : Loopable(), Watchdogable(), PIDSensor(), SerialReadable(serialTicker)
+    Gyro(unsigned long timeout, String name, SerialTicker *serialTicker) : Loopable("Test"), Watchdogable(), PIDSensor(), SerialReadable(serialTicker)
     {
         this->timeout = timeout;
-        this->name = name;
         serialTicker->addTo(this);
     }
 
