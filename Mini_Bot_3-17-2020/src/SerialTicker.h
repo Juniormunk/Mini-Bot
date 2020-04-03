@@ -11,8 +11,6 @@ class SerialTicker : public Loopable
 public:
     SerialTicker(HardwareSerial serial, String name) : Loopable(name)
     {
-        this->serial = serial;
-        this->readables = readables;
 
         this->serial = serial;
         this->serial.begin(115200);
