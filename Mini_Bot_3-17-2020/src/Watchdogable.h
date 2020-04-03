@@ -6,7 +6,7 @@
 struct Watchdogable
 {
 public:
-    Watchdogable(){};
+    Watchdogable(unsigned long timeout) { this->timeout = timeout; };
     virtual bool getIsWatchdogTripped(); //Returns if the watchdog has been tripped (AKA: device is not responding.)
     virtual void updateWatchdog();       //Send an update message to the gyro to see if it is responding.
 protected:

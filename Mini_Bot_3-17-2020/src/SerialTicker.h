@@ -3,38 +3,33 @@
 #include <Loopable.h>
 #include <SerialReadable.h>
 #include <SimpleList.h>
+#include <SerialTicker.h>
 
 struct SerialReadable;
 
-class SerialTicker : public Loopable
+struct SerialTicker : public Loopable
 {
 public:
-    SerialTicker(HardwareSerial serial, String name) : Loopable(name)
-    {
-
-        this->serial = serial;
-        this->serial.begin(115200);
-        this->serial.setTimeout(3);
-    };
+    SerialTicker(String name) : Loopable(name){};
 
     //Instance Methods
 
     /**
      * Adds the object to get serial updates.
      */
-    void addTo(SerialReadable *readable);
+    virtual void addTo(SerialReadable *readable) = 0;
 
     /**
      * Removes the object from getting serial updates.
      * 
      * Returns: weather the object was found and removed from the list.
      */
-    bool removeFrom(SerialReadable *readable);
+    virtual bool removeFrom(SerialReadable *readable) = 0;
 
     /**
      * Print to the serial port.
      */
-    void println(String message);
+    virtual void println(String message) = 0;
 
     /**
      * Returns: the last information that was recieve over the serial port.
@@ -47,14 +42,12 @@ public:
     unsigned long getReadTime() { return readTime; };
 
     //Loopable Methods
-    void init(){};
-    void periodic();
-    void end(){};
-    bool isFinished() { return false; };
+    virtual void init() = 0;
+    virtual void periodic() = 0;
+    virtual void end() = 0;
+    virtual bool isFinished() = 0;
 
-private:
-    HardwareSerial serial;
+protected:
     String latestString = "";
     unsigned long readTime;
-    SimpleList<SerialReadable *> *readables = new SimpleList<SerialReadable *>();
 };

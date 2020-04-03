@@ -1,12 +1,12 @@
-#include <SerialTicker.h>
+#include <SoftwareSerialTicker.h>
 #include <SerialReadable.h>
 
-void SerialTicker::addTo(SerialReadable *readable)
+void SoftwareSerialTicker::addTo(SerialReadable *readable)
 {
     readables->add(readable);
-};
+}
 
-bool SerialTicker::removeFrom(SerialReadable *readable)
+bool SoftwareSerialTicker::removeFrom(SerialReadable *readable)
 {
     for (int i = 0; i < readables->size(); i++)
     {
@@ -17,13 +17,13 @@ bool SerialTicker::removeFrom(SerialReadable *readable)
         }
     }
     return false;
-};
+}
 
-void SerialTicker::println(String message)
+void SoftwareSerialTicker::println(String message)
 {
     this->serial.println(message);
 }
-void SerialTicker::periodic()
+void SoftwareSerialTicker::periodic()
 {
     if (serial.available() > 0)
     {
@@ -34,4 +34,4 @@ void SerialTicker::periodic()
             readables->get(i)->serialRecieveEvent(latestString);
         }
     }
-};
+}

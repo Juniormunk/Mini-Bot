@@ -12,7 +12,8 @@ public:
     {
         this->ticker = ticker;
         //Add this object to get updates about serial events.
-        //this->ticker->add(this);
+        //this->ticker->addTo(this);
+        //getSerialTicker()->getName();
     };
 
     void println(String message);

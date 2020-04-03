@@ -3,11 +3,11 @@
 #include <SimpleList.h>
 #include <Loopable.h>
 #include <Schedular.h>
-#include <Gyro.h>
+#include <HardwareSerialTicker.h>
 
 //Our gyro with a serial port of Serial1 as that is where it is plugged in
 //Gyro gyro(Serial1, 600);
-SerialTicker serialTicker(Serial1, "Serial Ticker");
+HardwareSerialTicker serialTicker(Serial1, "Serial Ticker");
 Gyro gyro(600, "gyro", &serialTicker);
 SimpleList<Loopable *> *schedularList = new SimpleList<Loopable *>();
 Schedular *schedular;
