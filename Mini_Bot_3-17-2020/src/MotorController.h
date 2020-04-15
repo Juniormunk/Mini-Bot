@@ -7,19 +7,76 @@
 class MotorController : Loopable
 {
 public:
-    MotorController(String name) : Loopable(name){};
+    MotorController(String name, u_int8_t en_pin, u_int8_t pinA, u_int8_t pinB) : Loopable(name)
+    {
+        this->en_pin = en_pin;
+        this->pinA = pinA;
+        this->pinB = pinB;
+    };
     //Instance methods
 
     void setOutput(float output) { this->output = output; };
+    void setBrakeMode(bool shouldBrake) { this->shouldBrake = shouldBrake; };
+    void setReversed(bool shouldReverse) { this->shouldReverse = shouldReverse; };
 
     //Loopable methods
-    void init();
-    void periodic();
-    void isfinsished(){};
-    void end();
+    void init() { analogWrite(en_pin, 0); };
+    void periodic()
+    {
+        int value = abs(output) * 255;
+        if (output > 0)
+        {
+            if (shouldReverse)
+            {
+                digitalWrite(pinB, HIGH);
+                digitalWrite(pinA, LOW);
+                analogWrite(en_pin, value);
+            }
+            else
+            {
+                digitalWrite(pinA, HIGH);
+                digitalWrite(pinB, LOW);
+                analogWrite(en_pin, value);
+            }
+        }
+
+        if (output < 0)
+        {
+            if (shouldReverse)
+            {
+                digitalWrite(pinB, LOW);
+                digitalWrite(pinA, HIGH);
+                analogWrite(en_pin, value);
+            }
+            else
+            {
+                digitalWrite(pinA, LOW);
+                digitalWrite(pinB, HIGH);
+                analogWrite(en_pin, value);
+            }
+        }
+
+        if (output == 0)
+        {
+            if (!shouldBrake)
+                analogWrite(en_pin, 0);
+
+            if (shouldBrake)
+            {
+                digitalWrite(pinA, HIGH);
+                digitalWrite(pinB, HIGH);
+                analogWrite(en_pin, 255);
+            }
+        }
+    };
+    bool isfinsished() { return false; };
+    void end() { analogWrite(en_pin, 0); };
 
 private:
-    float output;
+    u_int8_t en_pin, pinA, pinB;
+    float output = 0;
+    bool shouldBrake = false;
+    bool shouldReverse = false;
 };
 
 #endif
