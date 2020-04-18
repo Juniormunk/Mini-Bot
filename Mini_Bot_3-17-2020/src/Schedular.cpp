@@ -52,3 +52,17 @@ bool Schedular::isFinished()
 {
     return false;
 }
+
+Loopable *Schedular::getLoopableByName(String name)
+{
+    for (int i = 0; i < schedular->size(); i++)
+    {
+        Loopable *loopable = schedular->get(i);
+
+        if (!(loopable->getName() == name))
+        {
+            return loopable;
+        }
+    }
+    return NULL;
+}

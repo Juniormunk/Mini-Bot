@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Loopable.h>
 
-class MotorController : Loopable
+class MotorController : public Loopable
 {
 public:
     MotorController(String name, u_int8_t en_pin, u_int8_t pinA, u_int8_t pinB) : Loopable(name)
@@ -12,6 +12,9 @@ public:
         this->en_pin = en_pin;
         this->pinA = pinA;
         this->pinB = pinB;
+        pinMode(en_pin, OUTPUT);
+        pinMode(pinA, OUTPUT);
+        pinMode(pinB, OUTPUT);
     };
     //Instance methods
 
@@ -34,6 +37,7 @@ public:
             }
             else
             {
+                Serial.println(pinA);
                 digitalWrite(pinA, HIGH);
                 digitalWrite(pinB, LOW);
                 analogWrite(en_pin, value);

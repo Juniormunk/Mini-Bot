@@ -13,6 +13,8 @@ public:
     void periodic();
     void end();
     bool isFinished();
+
+    Loopable *getLoopableByName(String name);
     //void add(Loopable loopable);
     //void remove(Loopable loopable);
 

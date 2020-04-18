@@ -3,19 +3,26 @@
 #include <SimpleList.h>
 #include <Loopable.h>
 #include <Schedular.h>
+#include <SoftwareSerialTicker.h>
 #include <HardwareSerialTicker.h>
+#include <MotorController.h>
 
 //Our gyro with a serial port of Serial1 as that is where it is plugged in
 //Gyro gyro(Serial1, 600);
-HardwareSerialTicker serialTicker(Serial1, "Serial Ticker");
-Gyro gyro(600, "gyro", &serialTicker);
+HardwareSerialTicker hardSerialTicker(Serial1, "Hardware Serial Ticker");
+Gyro gyro(600, "gyro", &hardSerialTicker);
+//SoftwareSerialTicker softSerialTicker(Serial, "Software Serial Ticker");
+MotorController leftWheel("Left Wheel", 30, 31, 32);
+
 SimpleList<Loopable *> *schedularList = new SimpleList<Loopable *>();
 Schedular *schedular;
 
 void setup()
 {
-  schedularList->add(&serialTicker);
+  schedularList->add(&hardSerialTicker);
+  //schedularList->add(&softSerialTicker);
   schedularList->add(&gyro);
+  schedularList->add(&leftWheel);
   schedular = new Schedular(schedularList);
 
   //Initalize serial ports.
@@ -40,4 +47,5 @@ void loop()
   schedular->periodic();
   if (!gyro.getIsWatchdogTripped())
     Serial.println(gyro.getYaw());
+  leftWheel.setOutput(.5);
 }

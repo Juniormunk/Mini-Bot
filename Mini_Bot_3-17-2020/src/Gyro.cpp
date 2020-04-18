@@ -14,6 +14,7 @@ ErrorCode Gyro::initialize()
         println(readySend);
         getSerialTicker()->periodic();
         String response = getLatestString();
+
         if (response.equals(initializingRecieve))
         {
             Loopable::init();
